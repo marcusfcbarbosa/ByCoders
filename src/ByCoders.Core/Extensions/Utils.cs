@@ -7,6 +7,10 @@ namespace ByCoders.Core.Extensions
 {
     public static class Utils
     {
+        public static string ApenasNumeros(this string str, string input)
+        {
+            return new string(input.Where(char.IsDigit).ToArray());
+        }
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> array, Action<T> act)
         {
             foreach (var i in array)

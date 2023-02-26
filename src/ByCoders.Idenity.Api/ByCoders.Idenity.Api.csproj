@@ -23,5 +23,9 @@
 	  
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ByCoders.Core\ByCoders.Core.csproj" />
+  </ItemGroup>
+
 
 </Project>
