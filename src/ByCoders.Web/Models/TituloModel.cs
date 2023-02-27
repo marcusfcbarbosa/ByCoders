@@ -1,4 +1,5 @@
-﻿using ByCoders.Core.Extensions;
+﻿using ByCoders.Core.Enums;
+using ByCoders.Core.Extensions;
 using ByCoders.Core.Identity;
 using Microsoft.VisualBasic;
 using System;
@@ -15,8 +16,8 @@ namespace ByCoders.Web.Models
     public class TituloModel
     {
         public Guid Id { get; set; }
-        public int Tipo { get;  set; }
-        public DateAndTime Data { get;  set; }
+        public TipoTransacao Tipo { get;  set; }
+        public DateTime Data { get;  set; }
         public decimal Valor { get;  set; }
         public string Cpf { get;  set; }
         public string Cartao { get;  set; }

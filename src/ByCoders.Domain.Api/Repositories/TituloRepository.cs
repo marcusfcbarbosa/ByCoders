@@ -54,7 +54,7 @@ namespace ByCoders.Domain.Api.Repositories
                       ORDER BY [NomeLoja] 
                       OFFSET {pageSize * (pageIndex - 1)} ROWS 
                       FETCH NEXT {pageSize} ROWS ONLY 
-                      SELECT COUNT(Id) FROM NomeLoja 
+                      SELECT COUNT(Id) FROM Titulos 
                       WHERE (@Nome IS NULL OR NomeLoja LIKE '%' + @Nome + '%')";
 
             var multi = await _context.Database.GetDbConnection()

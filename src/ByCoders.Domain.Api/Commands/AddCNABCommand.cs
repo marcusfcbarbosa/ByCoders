@@ -5,7 +5,7 @@ using ByCoders.Domain.Api.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,7 +34,6 @@ namespace ByCoders.Domain.Api.Commands
             }
         }
 
-
         public class AddCNABCommandHandler : CommandHandler,
             IRequestHandler<AddCNABCommand, ValidationResult>
         {
@@ -49,20 +48,19 @@ namespace ByCoders.Domain.Api.Commands
             public async Task<ValidationResult> Handle(AddCNABCommand request, CancellationToken cancellationToken)
             {
                 if (!request.Valid()) return request.validationResult;
-                var titulos = MappTitulo(request.File);
-                titulos.ForEach(x => _tituloRepository.Add(x));
-                return await PersistData(_tituloRepository.UnitOfWork);
+                string[] linhasCnab = request.File.Split('\n');
+                foreach (var linha in linhasCnab)
+                {
+                    var titulo = new Titulo(linha);
+                    if (titulo.validationResult.Errors.Count() == 0)
+                    {
+                        _tituloRepository.Add(titulo);
+                        await PersistData(_tituloRepository.UnitOfWork);
+                    }
+                    
+                }
+                return new ValidationResult();
             }
-
-
-            private List<Titulo> MappTitulo(string cnab)
-            {
-                var listaTitulos = new List<Titulo>();
-                string[] linhasCnab = cnab.Split('\n');
-
-                linhasCnab.ForEach(x=> listaTitulos.Add(new Titulo(x)));
-                return  listaTitulos;
-            } 
         }
     }
 }

@@ -48,20 +48,30 @@ namespace ByCoders.Idenity.Api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register(UserRegistration userRegistration)
         {
-            if (!ModelState.IsValid) return CustomResponse(ModelState);
-            var user = new IdentityUser
+            try
             {
-                UserName = userRegistration.Email,
-                Email = userRegistration.Email,
-                EmailConfirmed = true
-            };
-            var result = await _userManager.CreateAsync(user, userRegistration.Password);
-            if (result.Succeeded)
-            {
-                return CustomResponse(await GenerateJwt(userRegistration.Email));
+                if (!ModelState.IsValid) return CustomResponse(ModelState);
+                var user = new IdentityUser
+                {
+                    UserName = userRegistration.Email,
+                    Email = userRegistration.Email,
+                    EmailConfirmed = true
+                };
+                var result = await _userManager.CreateAsync(user, userRegistration.Password);
+                if (result.Succeeded)
+                {
+                    return CustomResponse(await GenerateJwt(userRegistration.Email));
+                }
+                result.Errors.ForEach(x => AddErrorProcessing(x.Description));
+                return CustomResponse();
             }
-            result.Errors.ForEach(x => AddErrorProcessing(x.Description));
-            return CustomResponse();
+            catch(Exception ex)
+            {
+
+                throw ex;
+
+            }
+            
         }
 
         #region "Private"

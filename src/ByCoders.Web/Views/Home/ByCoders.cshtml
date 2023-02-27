@@ -1,0 +1,54 @@
+﻿@using ByCoders.Core.Extensions;
+@model ByCoders.Web.Models.ListTituloModel
+
+@if (Model.aspNetUser.IsAuthenticated())
+{
+    <div class="container col-12">
+        <div class="row">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nome da Loja</th>
+                        <th scope="col">Dono da Loja</th>
+                        <th scope="col">Cpf</th>
+                        <th scope="col">Hora</th>
+                        <th scope="col">Numero Cartao</th>
+                        <th scope="col">Tipo de Transacao</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (var produto in Model.titulos.List.OrderBy(x=>x.NomeLoja))
+                        {
+                            <tr>
+                                <td>@produto.Id</td>
+                                <td>@produto.NomeLoja</td>
+                                <td>@produto.DonoLoja</td>
+                                <td>@produto.Cpf</td>
+                                <td>@produto.Hora</td>
+                                <td>@produto.Cartao</td>
+                                <td>@produto.Tipo.GetDescription()</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <a asp-controller="Home" asp-action="New" class="btn btn-success"> New</a>
+            <a asp-controller="Home" asp-action="Logout" class="btn btn-danger"> Logout</a>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+}
+else
+{
+    <div class="container col-6">
+        <small class="title text-muted">You must be logged</small>
+    </div>
+}
+
+<script type="text/javascript">
+    "use strict";
+</script>

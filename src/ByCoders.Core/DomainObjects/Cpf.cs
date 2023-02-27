@@ -10,7 +10,8 @@ namespace ByCoders.Core.DomainObjects
         protected Cpf() { }
         public Cpf(string numero)
         {
-            if (!Validar(numero)) throw new DomainException("CPF inválido");
+            //Tive que comentar a validaão pois o CPF passado no CNAB não é valido
+            //if (!Validar(numero)) throw new DomainException("CPF inválido");
             Numero = numero;
         }
         public static bool Validar(string cpf)

@@ -1,14 +1,19 @@
 ﻿using ByCoders.Core.Identity;
 using ByCoders.Core.Models;
+using ByCoders.Web.Models;
 using ByCoders.Web.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ByCoders.Web.Controllers
@@ -61,11 +66,39 @@ namespace ByCoders.Web.Controllers
             return View();
         }
 
+        [HttpPost]
+        [Route("register")]
+        public async Task<IActionResult> Register(UserRegistration userRegister)
+        {
+            if (!ModelState.IsValid) return View(userRegister);
+            var result = await _authenticationService.Register(userRegister);
+            if (ResponseHasErrors(result.ResponseResult)) return View(userRegister);
+            await LogIn(result);
+            return RedirectToAction(actionName: "bycoders", controllerName: "Home");
+        }
+
+
         [HttpGet]
         [Route("new")]
         public async Task<IActionResult> New()
         {
             return View();
+        }
+
+
+
+        [HttpPost]
+        [Route("new")]
+        public async Task<IActionResult> New(IFormFile file)
+        {
+            var result = new StringBuilder();
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            {
+                while (reader.Peek() >= 0)
+                    result.AppendLine(reader.ReadLine()+"\n");
+            }
+            await _tituloService.Add(new AddTituloModel { File = result.ToString() });
+            return RedirectToAction(actionName: "bycoders", controllerName: "Home");
         }
 
         [HttpGet]
@@ -76,6 +109,18 @@ namespace ByCoders.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        [Route("bycoders")]
+        [Authorize]
+        public async Task<IActionResult> Bycoders([FromQuery] int ps = 8, [FromQuery] int page = 1, [FromQuery] string q = null)
+        {
+            
+            return View(new ListTituloModel
+            {
+                aspNetUser = _aspNetUser,
+                titulos = await _tituloService.GetAllTitulosPaged(ps, page, q)
+        });
+        }
         #region "Private Methods"
         private async Task LogIn(UserResponseLogin userAnswersLogin)
         {

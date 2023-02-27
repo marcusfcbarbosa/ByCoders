@@ -12,7 +12,6 @@ namespace ByCoders.Web.Services
     public interface ITituloService
     {
         Task<PagedResult<TituloModel>> GetAllTitulosPaged(int pageSize, int pageIndex, string query = null);
-
         Task<ResponseResult> Add(AddTituloModel command);
     }
 
@@ -36,9 +35,12 @@ namespace ByCoders.Web.Services
 
         public async Task<PagedResult<TituloModel>> GetAllTitulosPaged(int pageSize, int pageIndex, string query = null)
         {
+
             var response = await _httpClient.GetAsync($"/api/titulos/all?ps={pageSize}&page={pageIndex}&q={query}");
             HandleErrorsResponse(response);
             return await DeserializeResponseObject<PagedResult<TituloModel>>(response);
         }
+
+
     }
 }
