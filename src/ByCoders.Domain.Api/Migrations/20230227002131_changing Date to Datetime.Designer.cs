@@ -4,14 +4,16 @@ using ByCoders.Domain.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ByCoders.Domain.Api.Migrations
 {
     [DbContext(typeof(ByCodersDBContext))]
-    partial class ByCodersDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230227002131_changing Date to Datetime")]
+    partial class changingDatetoDatetime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,9 +44,6 @@ namespace ByCoders.Domain.Api.Migrations
 
                     b.Property<string>("NomeLoja")
                         .HasColumnType("varchar(50)");
-
-                    b.Property<bool>("Processado")
-                        .HasColumnType("bit");
 
                     b.Property<int>("Tipo")
                         .HasColumnType("int");

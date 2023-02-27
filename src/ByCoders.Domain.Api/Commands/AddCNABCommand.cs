@@ -1,10 +1,14 @@
 ﻿using ByCoders.Core.Commands;
+using ByCoders.Core.Extensions;
+using ByCoders.Domain.Api.Entities;
 using ByCoders.Domain.Api.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace ByCoders.Domain.Api.Commands
 {
@@ -13,7 +17,8 @@ namespace ByCoders.Domain.Api.Commands
         public string File { get; set; }
         public override bool Valid()
         {
-            return base.Valid();
+            validationResult = new AddCNABValidation().Validate(this);
+            return validationResult.IsValid;
         }
 
 
@@ -43,8 +48,21 @@ namespace ByCoders.Domain.Api.Commands
 
             public async Task<ValidationResult> Handle(AddCNABCommand request, CancellationToken cancellationToken)
             {
-                throw new System.NotImplementedException();
+                if (!request.Valid()) return request.validationResult;
+                var titulos = MappTitulo(request.File);
+                titulos.ForEach(x => _tituloRepository.Add(x));
+                return await PersistData(_tituloRepository.UnitOfWork);
             }
+
+
+            private List<Titulo> MappTitulo(string cnab)
+            {
+                var listaTitulos = new List<Titulo>();
+                string[] linhasCnab = cnab.Split('\n');
+
+                linhasCnab.ForEach(x=> listaTitulos.Add(new Titulo(x)));
+                return  listaTitulos;
+            } 
         }
     }
 }

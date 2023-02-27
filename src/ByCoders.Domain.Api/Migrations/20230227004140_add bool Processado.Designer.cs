@@ -4,14 +4,16 @@ using ByCoders.Domain.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ByCoders.Domain.Api.Migrations
 {
     [DbContext(typeof(ByCodersDBContext))]
-    partial class ByCodersDBContextModelSnapshot : ModelSnapshot
+    [Migration("20230227004140_add bool Processado")]
+    partial class addboolProcessado
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

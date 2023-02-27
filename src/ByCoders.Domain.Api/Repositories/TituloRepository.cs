@@ -7,6 +7,7 @@ using Dapper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,7 @@ namespace ByCoders.Domain.Api.Repositories
     public interface ITituloRepository : IRepository<Titulo>
     {
         Task<PagedResult<Titulo>> GetAllTitulosPaged(int pageSize, int pageIndex, string query = null);
+        Task<IEnumerable<Titulo>> GetAllTitulosToProcess();
     }
     public class TituloRepository : ITituloRepository
     {
@@ -47,13 +49,13 @@ namespace ByCoders.Domain.Api.Repositories
 
         public async Task<PagedResult<Titulo>> GetAllTitulosPaged(int pageSize, int pageIndex, string query = null)
         {
-            var sql = @$"SELECT * FROM Cars 
-                      WHERE (@Nome IS NULL OR Model LIKE '%' + @Nome + '%') 
-                      ORDER BY [Model] 
+            var sql = @$"SELECT * FROM Titulos 
+                      WHERE (@Nome IS NULL OR NomeLoja LIKE '%' + @Nome + '%') 
+                      ORDER BY [NomeLoja] 
                       OFFSET {pageSize * (pageIndex - 1)} ROWS 
                       FETCH NEXT {pageSize} ROWS ONLY 
-                      SELECT COUNT(Id) FROM Cars 
-                      WHERE (@Nome IS NULL OR Model LIKE '%' + @Nome + '%')";
+                      SELECT COUNT(Id) FROM NomeLoja 
+                      WHERE (@Nome IS NULL OR NomeLoja LIKE '%' + @Nome + '%')";
 
             var multi = await _context.Database.GetDbConnection()
                 .QueryMultipleAsync(sql, new { Nome = query });
@@ -69,6 +71,24 @@ namespace ByCoders.Domain.Api.Repositories
                 PageSize = pageSize,
                 Query = query
             };
+        }
+
+        public async Task<IEnumerable<Titulo>> GetAllTitulosToProcess()
+        {
+            var sql = @"SELECT
+                             Id
+                            ,Tipo
+                            ,Valor
+                            ,Cpf
+                            ,Cartao
+                            ,Hora
+                            ,DonoLoja
+                            ,NomeLoja
+                            ,Data
+                            ,Processado
+                             FROM Titulos where Processado = 0";
+            return await _context.Database.GetDbConnection()
+                .QueryAsync<Titulo>(sql, null,  commandType: CommandType.Text);
         }
 
         public Task<Titulo> GetById(Guid id)

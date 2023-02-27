@@ -1,11 +1,12 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using System;
 
 namespace ByCoders.Core.DomainObjects
 {
     public abstract class Entity
     {
         public Guid Id { get; set; }
-
+        public ValidationResult validationResult { get; set; }
         protected Entity()
         {
             Id = Guid.NewGuid();

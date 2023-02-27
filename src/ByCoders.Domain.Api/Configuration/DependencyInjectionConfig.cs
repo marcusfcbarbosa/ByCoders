@@ -2,6 +2,7 @@
 using ByCoders.Domain.Api.Commands;
 using ByCoders.Domain.Api.Data;
 using ByCoders.Domain.Api.Repositories;
+using ByCoders.Domain.Api.Services;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,7 @@ namespace ByCoders.Domain.Api.Configuration
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddScoped<IAspNetUser, AspNetUser>();
+            services.AddHostedService<ProcessaTitulosService>();
             services.AddScoped<ITituloRepository, TituloRepository>();
             services.AddScoped<IRequestHandler<AddCNABCommand, ValidationResult>, AddCNABCommandHandler>();
             services.AddScoped<ByCodersDBContext>();
