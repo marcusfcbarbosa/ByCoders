@@ -1,6 +1,9 @@
 # ByCoders
 Estrutura
 
+Muito embora esteja em uma Unica Solution, ela foi construida em cima de critérios usados em arquitetura de microserviços, cada api, consegue ser completamente
+independente
+
 O aplicativo é segregado em 4 projetos
 1 website
 2 Identity
