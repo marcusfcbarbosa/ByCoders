@@ -11,9 +11,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-Domain", "3-Domain", "{BA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ByCoders.Idenity.Api", "src\ByCoders.Idenity.Api\ByCoders.Idenity.Api.csproj", "{2A88CE98-E83C-4C91-A5F6-9BD4429C24B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByCoders.Domain.Api", "src\ByCoders.Domain.Api\ByCoders.Domain.Api.csproj", "{1ECF9499-8CF6-41E9-A7C8-AAF807D3AC40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ByCoders.Domain.Api", "src\ByCoders.Domain.Api\ByCoders.Domain.Api.csproj", "{1ECF9499-8CF6-41E9-A7C8-AAF807D3AC40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ByCoders.Web", "src\ByCoders.Web\ByCoders.Web.csproj", "{84191C6B-8273-4996-A2DD-E625E76E27E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ByCoders.Web", "src\ByCoders.Web\ByCoders.Web.csproj", "{84191C6B-8273-4996-A2DD-E625E76E27E0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4-Core", "4-Core", "{FF0C4E8F-3E04-4245-A725-30FF05B67BCF}"
 EndProject
