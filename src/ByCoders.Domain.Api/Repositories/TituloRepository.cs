@@ -16,7 +16,7 @@ namespace ByCoders.Domain.Api.Repositories
     public interface ITituloRepository : IRepository<Titulo>
     {
         Task<PagedResult<Titulo>> GetAllTitulosPaged(int pageSize, int pageIndex, string query = null);
-        Task<IEnumerable<Titulo>> GetAllTitulosToProcess();
+        Task ProcessTituls();
     }
     public class TituloRepository : ITituloRepository
     {
@@ -73,22 +73,14 @@ namespace ByCoders.Domain.Api.Repositories
             };
         }
 
-        public async Task<IEnumerable<Titulo>> GetAllTitulosToProcess()
+        public async Task ProcessTituls()
         {
-            var sql = @"SELECT
-                             Id
-                            ,Tipo
-                            ,Valor
-                            ,Cpf
-                            ,Cartao
-                            ,Hora
-                            ,DonoLoja
-                            ,NomeLoja
-                            ,Data
-                            ,Processado
-                             FROM Titulos where Processado = 0";
-            return await _context.Database.GetDbConnection()
-                .QueryAsync<Titulo>(sql, null,  commandType: CommandType.Text);
+            var sql = @"UPDATE [dbo].[Titulos]
+                        SET 
+                            [Processado] = 1
+                            WHERE [Processado] = 0";
+            await _context.Database.GetDbConnection()
+                .ExecuteAsync(sql, null,  commandType: CommandType.Text);
         }
 
         public Task<Titulo> GetById(Guid id)

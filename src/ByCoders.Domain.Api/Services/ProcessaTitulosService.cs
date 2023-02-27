@@ -18,16 +18,20 @@ namespace ByCoders.Domain.Api.Services
             _serviceProvider = serviceProvider;
         }
 
+        /// <summary>
+        /// Imagina que após a inserção vc deseja que um processo secundário fique processando os arquivos
+        /// Dai só coloquei ele aqui pra ele ficar setando alguma coisa a criterio de exibição
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        /// <returns></returns>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            using (var scope = _serviceProvider.CreateScope())
+            while (!stoppingToken.IsCancellationRequested)
             {
-                var titulos = scope.ServiceProvider.GetRequiredService<ITituloRepository>();
-                var titulosAProcessar = await titulos.GetAllTitulosToProcess();
-                if(titulosAProcessar.Count() > 0)
+                using (var scope = _serviceProvider.CreateScope())
                 {
-                    titulosAProcessar.ForEach(x => x.ProcessaTitulo());
-                    await titulos.UnitOfWork.Commit();
+                    var titulos = scope.ServiceProvider.GetRequiredService<ITituloRepository>();
+                    await titulos.ProcessTituls();
                 }
             }
         }
